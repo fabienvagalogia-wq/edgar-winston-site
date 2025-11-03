@@ -2,13 +2,26 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Button } from './components/ui/button'
-import { Handshake, Search } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './components/ui/card'
+import { Input } from './components/ui/input'
+import { Textarea } from './components/ui/textarea'
+import { Badge } from './components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
+import { Handshake, Search, CheckCircle2, Phone, Mail } from 'lucide-react'
+
+const Section = ({ id, children, className = '' }) => (
+  <section id={id} className={['w-full py-20 md:py-28', className].join(' ')}>{children}</section>
+)
+const Container = ({ children, className = '' }) => (
+  <div className={['mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>
+)
 
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-black">
-      <section id="accueil" className="pt-16 md:pt-20 w-full py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
+      {/* HERO */}
+      <Section id="accueil" className="pt-16 md:pt-20">
+        <Container className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="px-3 py-1 rounded-full border text-sm text-gray-500">Paie</span>
@@ -41,14 +54,8 @@ export default function App() {
               </div>
             </div>
           </div>
-
-          {/* Hero – visuel droit : Photo corporate noir & blanc premium */}
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
               <div className="relative rounded-2xl border overflow-hidden shadow-sm">
                 <img
                   src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
@@ -61,8 +68,43 @@ export default function App() {
               </div>
             </motion.div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      {/* CONTACT QUICK */}
+      <Section id="contact" className="bg-gray-50">
+        <Container className="grid md:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-semibold">Discutons de vos besoins</h2>
+            <p className="mt-4 text-gray-600">Dites-nous en plus sur vos recrutements ou votre projet professionnel.</p>
+            <div className="mt-6 space-y-3 text-gray-700">
+              <div className="flex items-center gap-2"><Phone className="w-4 h-4"/> +33 1 84 00 00 00</div>
+              <div className="flex items-center gap-2"><Mail className="w-4 h-4"/> contact@edgarwinston.com</div>
+            </div>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Nous écrire</CardTitle>
+              <CardDescription>Réponse sous 24h ouvrées.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid md:grid-cols-2 gap-3">
+                <Input placeholder="Nom" />
+                <Input placeholder="Entreprise (facultatif)" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                <Input type="email" placeholder="Email" />
+                <Input type="tel" placeholder="Téléphone" />
+              </div>
+              <Textarea placeholder="Votre message" rows={6} />
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-gray-500">En envoyant, vous acceptez notre politique de confidentialité.</div>
+                <Button>Envoyer</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </Container>
+      </Section>
     </div>
   )
 }
