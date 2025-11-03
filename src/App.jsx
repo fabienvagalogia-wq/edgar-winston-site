@@ -7,7 +7,10 @@ import { Input } from './components/ui/input'
 import { Textarea } from './components/ui/textarea'
 import { Badge } from './components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
-import { Handshake, Search, CheckCircle2, Phone, Mail } from 'lucide-react'
+import {
+  Building2, Users, Briefcase, Handshake, Search, CheckCircle2, MapPin, ArrowRight,
+  ShieldCheck, Star, LineChart, Phone, Mail, Quote
+} from 'lucide-react'
 
 const Section = ({ id, children, className = '' }) => (
   <section id={id} className={['w-full py-20 md:py-28', className].join(' ')}>{children}</section>
@@ -15,10 +18,48 @@ const Section = ({ id, children, className = '' }) => (
 const Container = ({ children, className = '' }) => (
   <div className={['mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>
 )
+const SectionTitle = ({ kicker, title, subtitle }) => (
+  <div className="mx-auto max-w-3xl text-center mb-12">
+    {kicker && (<span className="text-sm uppercase tracking-widest text-gray-500">{kicker}</span>)}
+    <h2 className="mt-2 text-3xl md:text-4xl font-semibold leading-tight">{title}</h2>
+    {subtitle && (<p className="mt-4 text-gray-600 text-lg">{subtitle}</p>)}
+  </div>
+)
+
+const jobs = [
+  { title: 'Responsable Paie Multi-sites', sector: 'Paie & Administration du personnel', location: 'Paris / Hybrid', type: 'CDI' },
+  { title: "Collaborateur Comptable Confirmé", sector: "Cabinet d'expertise comptable", location: 'Lyon 2e', type: 'CDI' },
+  { title: 'Juriste Droit des Sociétés', sector: 'Juridique Corporate', location: 'Nantes', type: 'CDI' },
+  { title: 'Gestionnaire Paie Senior', sector: 'Paie / Groupe retail', location: 'Remote – France', type: 'CDI' },
+]
 
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-black">
+
+      {/* Header simple */}
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b">
+        <Container className="flex h-16 items-center justify-between gap-6">
+          <a href="#accueil" className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-black text-white grid place-items-center font-bold">E&W</div>
+            <div className="leading-tight">
+              <p className="text-sm uppercase tracking-widest">Edgar & Winston</p>
+              <p className="text-xs text-gray-500">Cabinet de recrutement</p>
+            </div>
+          </a>
+          <nav className="hidden md:flex items-center gap-6">
+            <a href="#expertises" className="text-sm text-gray-600 hover:text-black">Expertises</a>
+            <a href="#metiers" className="text-sm text-gray-600 hover:text-black">Nos métiers</a>
+            <a href="#offres" className="text-sm text-gray-600 hover:text-black">Offres</a>
+            <a href="#candidats" className="text-sm text-gray-600 hover:text-black">Candidats</a>
+            <a href="#clients" className="text-sm text-gray-600 hover:text-black">Entreprises</a>
+            <a href="#faq" className="text-sm text-gray-600 hover:text-black">FAQ</a>
+            <Button><a href="#contact">Contact</a></Button>
+          </nav>
+          <a href="#contact" className="md:hidden"><Button>Contact</Button></a>
+        </Container>
+      </header>
+
       {/* HERO */}
       <Section id="accueil" className="pt-16 md:pt-20">
         <Container className="grid md:grid-cols-2 gap-10 items-center">
@@ -36,8 +77,8 @@ export default function App() {
               Shortlist rapide, process transparent, accompagnement exigeant.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button><Handshake className="w-4 h-4 mr-2" />Confier un recrutement</Button>
-              <Button variant="secondary"><Search className="w-4 h-4 mr-2" />Envoyer mon CV</Button>
+              <Button><a href="#clients" className="flex items-center gap-2"><Handshake className="w-4 h-4" />Confier un recrutement</a></Button>
+              <Button variant="secondary"><a href="#candidats" className="flex items-center gap-2"><Search className="w-4 h-4" />Envoyer mon CV</a></Button>
             </div>
             <div className="mt-8 grid grid-cols-3 gap-3">
               <div className="p-6 rounded-2xl border bg-white">
@@ -71,22 +112,210 @@ export default function App() {
         </Container>
       </Section>
 
-      {/* CONTACT QUICK */}
-      <Section id="contact" className="bg-gray-50">
+      {/* Services */}
+      <Section id="expertises" className="bg-gray-50">
+        <Container>
+          <SectionTitle kicker="Nos services" title="Une solution pour chaque besoin" subtitle="CDI, CDD, intérim & missions — accompagnement sur mesure pour entreprises et candidats." />
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Vous êtes une entreprise ?</CardTitle>
+                <CardDescription>Recrutements paie, comptabilité et juridique — middle & top management, profils rares ou en volume.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm text-gray-600">
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Brief structuré & scorecards</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Sourcing direct & prise de références</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Shortlist qualifiée ≤ 72h</div>
+                <div className="pt-2"><Button>Confier un besoin</Button></div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Vous êtes candidat ?</CardTitle>
+                <CardDescription>Accompagnement transparent et rapide sur des opportunités alignées avec vos objectifs.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm text-gray-600">
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Coaching entretien & feedback 72h</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Confidentialité & conseils de rémunération</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Process clair étape par étape</div>
+                <div className="pt-2"><Button variant="secondary">Déposer mon CV</Button></div>
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Metiers */}
+      <Section id="metiers">
+        <Container>
+          <SectionTitle kicker="Nos métiers" title="Nos domaines d'expertise" subtitle="Sélection rigoureuse de talents spécialisés en paie, comptabilité et juridique." />
+          <Tabs defaultValue="paie">
+            <div className="grid grid-cols-3 w-full rounded-2xl border p-1 mb-6">
+              <button className="px-3 py-2 rounded-xl text-sm bg-black text-white">Paie</button>
+              <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Comptabilité</button>
+              <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Juridique</button>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {['Gestionnaire paie','Référent paie','Responsable paie','ADP','Payroll Manager','Chef de projet SIRH Paie'].map((r,i)=>(
+                <Badge key={i} className="justify-center py-2">{r}</Badge>
+              ))}
+            </div>
+          </Tabs>
+        </Container>
+      </Section>
+
+      {/* Pourquoi nous */}
+      <Section className="bg-gray-50">
+        <Container>
+          <SectionTitle kicker="Pourquoi nous" title="Les bonnes raisons de nous choisir" />
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card><CardHeader><CardTitle>Zéro coût pour les candidats</CardTitle><CardDescription>Les entreprises nous rémunèrent au succès, jamais les candidats.</CardDescription></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Spécialisation métier</CardTitle><CardDescription>100% dédiés à la paie, la comptabilité et le juridique.</CardDescription></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Méthode & KPI</CardTitle><CardDescription>Cadence hebdo, reporting partagé, time-to-hire réduit.</CardDescription></CardHeader></Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Offres */}
+      <Section id="offres">
+        <Container>
+          <SectionTitle kicker="Offres" title="Postes ouverts" subtitle="Quelques opportunités représentatives (exemples)." />
+          <div className="grid md:grid-cols-2 gap-6">
+            {jobs.map((job, idx) => (
+              <Card key={idx}>
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <CardTitle className="text-xl">{job.title}</CardTitle>
+                      <CardDescription className="mt-1 flex flex-wrap gap-3 items-center">
+                        <span className="flex items-center gap-2"><Building2 className="w-4 h-4" />{job.sector}</span>
+                        <span className="flex items-center gap-2"><MapPin className="w-4 h-4" />{job.location}</span>
+                        <Badge>{job.type}</Badge>
+                      </CardDescription>
+                    </div>
+                    <Button variant="secondary" className="px-3 py-1.5 text-sm">Postuler</Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Package attractif, rôle à fort impact</li>
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Environnement exigeant, équipe senior</li>
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Process rapide & confidentiel</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Candidats */}
+      <Section id="candidats" className="bg-gray-50">
+        <Container>
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <SectionTitle kicker="Candidats" title="Votre prochain challenge, sans friction" subtitle="Coaching, feedback sincère et visibilité claire sur l'avancement." />
+              <div className="grid md:grid-cols-2 gap-4">
+                <Card><CardHeader><CardTitle className="text-base">Préparation aux entretiens</CardTitle><CardDescription>Brief précis, cas types, conseils de posture.</CardDescription></CardHeader></Card>
+                <Card><CardHeader><CardTitle className="text-base">Transparence</CardTitle><CardDescription>Feedback sous 72h après chaque étape.</CardDescription></CardHeader></Card>
+              </div>
+            </div>
+            <div>
+              <Card>
+                <CardHeader><CardTitle>Déposez votre CV</CardTitle><CardDescription>Nous revenons vers vous si une opportunité correspond.</CardDescription></CardHeader>
+                <CardContent className="space-y-3">
+                  <Input placeholder="Nom & Prénom" />
+                  <Input type="email" placeholder="Email" />
+                  <Input type="tel" placeholder="Téléphone" />
+                  <Input type="file" />
+                  <Textarea placeholder="Secteurs, localisations, prétentions…" />
+                  <Button className="w-full">Envoyer</Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Clients */}
+      <Section id="clients">
+        <Container>
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <SectionTitle kicker="Entreprises" title="Un partenaire de recrutement orienté résultat" subtitle="De la définition du besoin à l'onboarding, avec des garanties adaptées." />
+              <ul className="space-y-3 text-gray-600">
+                {['Brief structuré et scorecards par compétences','Mapping de marché & ciblage précis','Entretiens approfondis & études de cas','Références et accompagnement de l\'offre'].map((item, i) => (
+                  <li key={i} className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" />{item}</li>
+                ))}
+              </ul>
+              <div className="mt-6 flex gap-3">
+                <Button>Parler à un consultant</Button>
+                <Button variant="secondary"><a href="#faq">Voir la FAQ</a></Button>
+              </div>
+            </div>
+            <div>
+              <Card>
+                <CardHeader><CardTitle>Nos modèles d'accompagnement</CardTitle><CardDescription>Choisissez le format adapté à votre cadence d'embauche.</CardDescription></CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 rounded-2xl border p-1 w-full">
+                    <button className="px-3 py-2 rounded-xl text-sm bg-black text-white">Success fee</button>
+                    <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Retained</button>
+                    <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">RPO</button>
+                  </div>
+                  <p className="mt-4 text-sm text-gray-600">Paiement au succès, idéal pour besoins ponctuels. Démarrage rapide, engagement flexible.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Témoignages */}
+      <Section>
+        <Container>
+          <SectionTitle kicker="Témoignages" title="Ce que disent nos clients & candidats" />
+          <div className="grid md:grid-cols-3 gap-6">
+            {[1,2,3].map((i) => (
+              <Card key={i}>
+                <CardContent className="pt-6">
+                  <Quote className="w-8 h-8" />
+                  <p className="mt-4 text-gray-600">« Une compréhension fine des métiers paie/compta/juridique et une exécution rapide. Shortlist reçue en 48h. »</p>
+                  <div className="mt-4 text-sm">
+                    <p className="font-medium">DRH, ETI multi-sites</p>
+                    <p className="text-gray-500">Île-de-France</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* FAQ */}
+      <Section id="faq" className="bg-gray-50">
+        <Container>
+          <SectionTitle kicker="FAQ" title="Une question ? On vous répond" />
+          <div className="mx-auto max-w-3xl space-y-4">
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Êtes-vous payants pour les candidats ?</summary><div className="mt-2 text-sm text-gray-600">Jamais. Nos services sont 100% gratuits pour les candidats. Les entreprises nous rémunèrent uniquement en cas de succès.</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Quels profils recrutez-vous ?</summary><div className="mt-2 text-sm text-gray-600">Paie (gestionnaires, responsables, SIRH), Comptabilité (opérationnels à direction), Juridique (sociétés, social, paralegal, conformité), en CDI, CDD, intérim et missions.</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">En combien de temps envoyez-vous une shortlist ?</summary><div className="mt-2 text-sm text-gray-600">En général sous 48–72h après le brief qualifié, grâce à notre base de talents et notre approche directe.</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Intervenez-vous partout en France ?</summary><div className="mt-2 text-sm text-gray-600">Oui, nous opérons partout en France, en présentiel, hybride ou full-remote selon les postes.</div></details>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Contact & Footer */}
+      <Section id="contact">
         <Container className="grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold">Discutons de vos besoins</h2>
-            <p className="mt-4 text-gray-600">Dites-nous en plus sur vos recrutements ou votre projet professionnel.</p>
-            <div className="mt-6 space-y-3 text-gray-700">
-              <div className="flex items-center gap-2"><Phone className="w-4 h-4"/> +33 1 84 00 00 00</div>
-              <div className="flex items-center gap-2"><Mail className="w-4 h-4"/> contact@edgarwinston.com</div>
+            <SectionTitle kicker="Contact" title="Discutons de vos besoins" subtitle="Dites-nous en plus sur vos recrutements ou votre projet professionnel." />
+            <div className="space-y-3 text-gray-700">
+              <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> +33 1 84 00 00 00</div>
+              <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> contact@edgarwinston.com</div>
             </div>
           </div>
           <Card>
-            <CardHeader>
-              <CardTitle>Nous écrire</CardTitle>
-              <CardDescription>Réponse sous 24h ouvrées.</CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Nous écrire</CardTitle><CardDescription>Réponse sous 24h ouvrées.</CardDescription></CardHeader>
             <CardContent className="space-y-3">
               <div className="grid md:grid-cols-2 gap-3">
                 <Input placeholder="Nom" />
@@ -99,12 +328,58 @@ export default function App() {
               <Textarea placeholder="Votre message" rows={6} />
               <div className="flex items-center justify-between">
                 <div className="text-xs text-gray-500">En envoyant, vous acceptez notre politique de confidentialité.</div>
-                <Button>Envoyer</Button>
+                <Button>Envoyer <ArrowRight className="ml-2 w-4 h-4" /></Button>
               </div>
             </CardContent>
           </Card>
         </Container>
       </Section>
+
+      <footer className="border-t">
+        <Container className="py-10 grid md:grid-cols-4 gap-6 text-sm">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-black text-white grid place-items-center font-bold">E&W</div>
+              <div>
+                <p className="font-medium">Edgar & Winston</p>
+                <p className="text-gray-600">Recrutement Paie · Comptabilité · Juridique</p>
+              </div>
+            </div>
+            <p className="mt-4 text-gray-600">Paris • Lyon • Remote France</p>
+          </div>
+          <div>
+            <p className="font-medium mb-2">Navigation</p>
+            <ul className="space-y-2 text-gray-600">
+              <li><a href="#expertises" className="hover:text-black">Nos services</a></li>
+              <li><a href="#metiers" className="hover:text-black">Nos métiers</a></li>
+              <li><a href="#offres" className="hover:text-black">Offres</a></li>
+              <li><a href="#faq" className="hover:text-black">FAQ</a></li>
+              <li><a href="#contact" className="hover:text-black">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-medium mb-2">Ressources</p>
+            <ul className="space-y-2 text-gray-600">
+              <li><a href="#" className="hover:text-black">Mentions légales</a></li>
+              <li><a href="#" className="hover:text-black">Politique de confidentialité</a></li>
+              <li><a href="#" className="hover:text-black">RGPD & cookies</a></li>
+              <li><a href="#" className="hover:text-black">Blog</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-medium mb-2">Newsletter</p>
+            <div className="flex gap-2">
+              <Input placeholder="Votre email" />
+              <Button>S'abonner</Button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Insights recrutement 1×/mois – pas de spam.</p>
+          </div>
+        </Container>
+        <div className="py-6 text-center text-xs text-gray-500 border-t">
+          © {new Date().getFullYear()} Edgar & Winston — Tous droits réservés.
+        </div>
+      </footer>
+
     </div>
   )
 }
