@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './com
 import { Input } from './components/ui/input'
 import { Textarea } from './components/ui/textarea'
 import { Badge } from './components/ui/badge'
-import { Handshake, Search, CheckCircle2, Building2, MapPin, ArrowRight, Mail, Quote } from 'lucide-react'
+import { Handshake, Search, CheckCircle2, Building2, MapPin, ArrowRight, Mail, Wallet, Calculator, Scale } from 'lucide-react'
 
 const Section = ({ id, children, className = '' }) => (<section id={id} className={['w-full py-20 md:py-28', className].join(' ')}>{children}</section>)
 const Container = ({ children, className = '' }) => (<div className={['mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>)
@@ -79,6 +79,7 @@ export default function App() {
         </Container>
       </header>
 
+      {/* HERO */}
       <Section id="accueil" className="pt-16 md:pt-20">
         <Container className="grid md:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
           <div>
@@ -115,6 +116,157 @@ export default function App() {
         </Container>
       </Section>
 
+      {/* EXPERTISES */}
+      <Section id="expertises" className="bg-gray-50">
+        <Container>
+          <SectionTitle kicker="Nos services" title="Une solution pour chaque besoin" subtitle="CDI, CDD, intérim & missions — accompagnement sur mesure pour entreprises et candidats." />
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Vous êtes une entreprise ?</CardTitle>
+                <CardDescription>Recrutements paie, comptabilité et juridique — middle & top management, profils rares ou en volume.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm text-gray-600">
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Brief structuré & scorecards</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Sourcing direct & prise de références</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Shortlist qualifiée ≤ 72h</div>
+                <div className="pt-2"><Button as="a" href="#contact">Confier un besoin</Button></div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Vous êtes candidat ?</CardTitle>
+                <CardDescription>Accompagnement transparent et rapide sur des opportunités alignées avec vos objectifs.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm text-gray-600">
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Coaching entretien & feedback 72h</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Confidentialité & conseils de rémunération</div>
+                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Process clair étape par étape</div>
+                <div className="pt-2"><Button as="a" href="#candidats" variant="secondary">Déposer mon CV</Button></div>
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* METIERS */}
+      <Section id="metiers">
+        <Container>
+          <SectionTitle kicker="Nos métiers" title="Trois piliers d'expertise" subtitle="Des experts spécialisés sur trois piliers clés de la performance d’entreprise." />
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Wallet className="w-5 h-5" />
+                  <CardTitle>Paie</CardTitle>
+                </div>
+                <CardDescription>De l’opérationnel au pilotage SIRH</CardDescription>
+              </CardHeader>
+              <CardContent className="text-sm text-gray-700 space-y-2">
+                <p>Gestionnaire Paie</p>
+                <p>Responsable Paie</p>
+                <p>Expert Paie</p>
+                <p>Directeur Paie</p>
+                <p>Assistant Paie</p>
+                <p>Coordinateur Paie</p>
+                <p>Superviseur Paie</p>
+                <p>Consultant SIRH</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Calculator className="w-5 h-5" />
+                  <CardTitle>Comptabilité</CardTitle>
+                </div>
+                <CardDescription>Cabinet & entreprise – junior à direction</CardDescription>
+              </CardHeader>
+              <CardContent className="text-sm text-gray-700 space-y-2">
+                <p>Comptable Général</p>
+                <p>Comptable Clients</p>
+                <p>Comptable Fournisseurs</p>
+                <p>Collaborateur Comptable</p>
+                <p>Responsable Comptabilité</p>
+                <p>RAF</p>
+                <p>DAF</p>
+                <p>Directeur Financier</p>
+                <p>Chef de Mission</p>
+                <p>Expert-Comptable</p>
+                <p>Auditeur Financier</p>
+                <p>Contrôleur de Gestion</p>
+                <p>Comptable Fiscaliste</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Scale className="w-5 h-5" />
+                  <CardTitle>Juridique</CardTitle>
+                </div>
+                <CardDescription>Affaires, social, conformité</CardDescription>
+              </CardHeader>
+              <CardContent className="text-sm text-gray-700 space-y-2">
+                <p>Juriste</p>
+                <p>Assistant Juridique</p>
+                <p>Responsable Juridique</p>
+                <p>Secrétaire Juridique</p>
+                <p>Chargé de conformité</p>
+                <p>Contrôleur Juridique</p>
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* CLIENTS */}
+      <Section id="clients">
+        <Container>
+          <SectionTitle kicker="Entreprises" title="Un partenaire de recrutement orienté résultat" subtitle="De la définition du besoin à l'onboarding, avec des garanties adaptées." />
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card><CardHeader><CardTitle>Success fee</CardTitle><CardDescription>Paiement au succès. Idéal pour besoins ponctuels. Démarrage rapide.</CardDescription></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Retained</CardTitle><CardDescription>Accompagnement exclusif avec jalons, livrables et reporting hebdo.</CardDescription></CardHeader></Card>
+            <Card><CardHeader><CardTitle>RPO</CardTitle><CardDescription>Consultant(e) dédié(e) intégré(e) à vos équipes pour une cadence élevée.</CardDescription></CardHeader></Card>
+          </div>
+          <div className="mt-6 text-center">
+            <Button as="a" href="#contact">Parler à un consultant</Button>
+          </div>
+        </Container>
+      </Section>
+
+      {/* OFFRES */}
+      <Section id="offres">
+        <Container>
+          <SectionTitle kicker="Offres" title="Postes ouverts" subtitle="Quelques opportunités représentatives (exemples)." />
+          <div className="grid md:grid-cols-2 gap-6">
+            {jobs.map((job, idx) => (
+              <Card key={idx}>
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <CardTitle className="text-xl">{job.title}</CardTitle>
+                      <CardDescription className="mt-1 flex flex-wrap gap-3 items-center">
+                        <span className="flex items-center gap-2"><Building2 className="w-4 h-4" />{job.sector}</span>
+                        <span className="flex items-center gap-2"><MapPin className="w-4 h-4" />{job.location}</span>
+                        <Badge>{job.type}</Badge>
+                      </CardDescription>
+                    </div>
+                    <Button variant="secondary" as="a" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Candidature — ' + job.title)}`} className="px-3 py-1.5 text-sm">Postuler</Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Package attractif, rôle à fort impact</li>
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Environnement exigeant, équipe senior</li>
+                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Process rapide & confidentiel</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* CANDIDATS */}
       <Section id="candidats" className="bg-gray-50">
         <Container>
           <div className="grid md:grid-cols-2 gap-10 items-center">
@@ -154,38 +306,20 @@ export default function App() {
         </Container>
       </Section>
 
-      <Section id="offres">
+      {/* FAQ */}
+      <Section id="faq" className="bg-gray-50">
         <Container>
-          <SectionTitle kicker="Offres" title="Postes ouverts" subtitle="Quelques opportunités représentatives (exemples)." />
-          <div className="grid md:grid-cols-2 gap-6">
-            {jobs.map((job, idx) => (
-              <Card key={idx}>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <CardTitle className="text-xl">{job.title}</CardTitle>
-                      <CardDescription className="mt-1 flex flex-wrap gap-3 items-center">
-                        <span className="flex items-center gap-2"><Building2 className="w-4 h-4" />{job.sector}</span>
-                        <span className="flex items-center gap-2"><MapPin className="w-4 h-4" />{job.location}</span>
-                        <Badge>{job.type}</Badge>
-                      </CardDescription>
-                    </div>
-                    <Button as="a" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Candidature — ' + job.title)}`} variant="secondary" className="px-3 py-1.5 text-sm">Postuler</Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="text-sm text-gray-600 space-y-2">
-                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Package attractif, rôle à fort impact</li>
-                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Environnement exigeant, équipe senior</li>
-                    <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" /> Process rapide & confidentiel</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
+          <SectionTitle kicker="FAQ" title="Une question ? On vous répond" />
+          <div className="mx-auto max-w-3xl space-y-4">
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Êtes-vous payants pour les candidats ?</summary><div className="mt-2 text-sm text-gray-600">Jamais. Nos services sont 100% gratuits pour les candidats. Les entreprises nous rémunèrent uniquement en cas de succès.</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Quels profils recrutez-vous ?</summary><div className="mt-2 text-sm text-gray-600">Paie (gestionnaires, responsables, SIRH), Comptabilité (opérationnels à direction), Juridique (sociétés, social, paralegal, conformité).</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">En combien de temps envoyez-vous une shortlist ?</summary><div className="mt-2 text-sm text-gray-600">En général sous 48–72h après le brief qualifié.</div></details>
+            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Intervenez-vous partout en France ?</summary><div className="mt-2 text-sm text-gray-600">Oui, nous opérons partout en France, en présentiel, hybride ou full-remote selon les postes.</div></details>
           </div>
         </Container>
       </Section>
 
+      {/* CONTACT */}
       <Section id="contact">
         <Container className="grid md:grid-cols-2 gap-10 items-start">
           <div>
@@ -229,6 +363,7 @@ export default function App() {
         </Container>
       </Section>
 
+      {/* FOOTER */}
       <footer className="border-t">
         <Container className="py-10 grid md:grid-cols-4 gap-6 text-sm">
           <div>
