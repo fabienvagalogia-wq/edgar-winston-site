@@ -1,23 +1,15 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './components/ui/card'
 import { Input } from './components/ui/input'
 import { Textarea } from './components/ui/textarea'
 import { Badge } from './components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
-import {
-  Building2, Users, Briefcase, Handshake, Search, CheckCircle2, MapPin, ArrowRight,
-  ShieldCheck, Star, LineChart, Phone, Mail, Quote
-} from 'lucide-react'
+import { Handshake, Search, CheckCircle2, Building2, MapPin, ArrowRight, Mail, Quote } from 'lucide-react'
 
-const Section = ({ id, children, className = '' }) => (
-  <section id={id} className={['w-full py-20 md:py-28', className].join(' ')}>{children}</section>
-)
-const Container = ({ children, className = '' }) => (
-  <div className={['mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>
-)
+const Section = ({ id, children, className = '' }) => (<section id={id} className={['w-full py-20 md:py-28', className].join(' ')}>{children}</section>)
+const Container = ({ children, className = '' }) => (<div className={['mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>)
 const SectionTitle = ({ kicker, title, subtitle }) => (
   <div className="mx-auto max-w-3xl text-center mb-12">
     {kicker && (<span className="text-sm uppercase tracking-widest text-gray-500">{kicker}</span>)}
@@ -29,21 +21,49 @@ const SectionTitle = ({ kicker, title, subtitle }) => (
 const jobs = [
   { title: 'Responsable Paie Multi-sites', sector: 'Paie & Administration du personnel', location: 'Paris / Hybrid', type: 'CDI' },
   { title: "Collaborateur Comptable Confirmé", sector: "Cabinet d'expertise comptable", location: 'Lyon 2e', type: 'CDI' },
-  { title: 'Juriste Droit des Sociétés', sector: 'Juridique Corporate', location: 'Nantes', type: 'CDI' },
-  { title: 'Gestionnaire Paie Senior', sector: 'Paie / Groupe retail', location: 'Remote – France', type: 'CDI' },
 ]
 
+const CONTACT_EMAIL = 'contact@edgaretwinston.fr'
+// ✳️ Remplace ces 2 URL par tes vrais endpoints Formspree (format: https://formspree.io/f/xxxxabcd)
+const FORMSPREE_NEED = 'https://formspree.io/f/XXXXNEED'
+const FORMSPREE_CV   = 'https://formspree.io/f/XXXXCV__'
+
+async function sendFormspree(endpoint, payload, setState) {
+  try {
+    setState({ loading: true, ok: false, error: '' })
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: payload
+    })
+    const data = await res.json().catch(()=>({}))
+    if (res.ok) setState({ loading: false, ok: true, error: '' })
+    else setState({ loading: false, ok: false, error: (data?.error || 'Une erreur est survenue') })
+  } catch (e) {
+    setState({ loading: false, ok: false, error: 'Connexion impossible' })
+  }
+}
+
+function FormStatus({ state }) {
+  if (state.loading) return <p className="text-sm text-gray-500">Envoi en cours…</p>
+  if (state.ok) return <p className="text-sm text-green-600">Merci, votre message a bien été envoyé ✅</p>
+  if (state.error) return <p className="text-sm text-red-600">Erreur : {state.error}</p>
+  return null
+}
+
 export default function App() {
+  const [needState, setNeedState] = useState({ loading: false, ok: false, error: '' })
+  const [cvState, setCvState] = useState({ loading: false, ok: false, error: '' })
+
   return (
     <div className="min-h-screen bg-white text-black">
 
-      {/* Header simple */}
       <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b">
         <Container className="flex h-16 items-center justify-between gap-6">
           <a href="#accueil" className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-black text-white grid place-items-center font-bold">E&W</div>
             <div className="leading-tight">
-              <p className="text-sm uppercase tracking-widest">Edgar & Winston</p>
+              <p className="text-sm uppercase tracking-widest">EDGAR & WINSTON</p>
               <p className="text-xs text-gray-500">Cabinet de recrutement</p>
             </div>
           </a>
@@ -54,15 +74,14 @@ export default function App() {
             <a href="#candidats" className="text-sm text-gray-600 hover:text-black">Candidats</a>
             <a href="#clients" className="text-sm text-gray-600 hover:text-black">Entreprises</a>
             <a href="#faq" className="text-sm text-gray-600 hover:text-black">FAQ</a>
-            <Button><a href="#contact">Contact</a></Button>
+            <Button as="a" href="#contact">Contact</Button>
           </nav>
-          <a href="#contact" className="md:hidden"><Button>Contact</Button></a>
+          <Button as="a" href="#contact" className="md:hidden">Contact</Button>
         </Container>
       </header>
 
-      {/* HERO */}
       <Section id="accueil" className="pt-16 md:pt-20">
-        <Container className="grid md:grid-cols-2 gap-10 items-center">
+        <Container className="grid md:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="px-3 py-1 rounded-full border text-sm text-gray-500">Paie</span>
@@ -77,34 +96,19 @@ export default function App() {
               Shortlist rapide, process transparent, accompagnement exigeant.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button><a href="#clients" className="flex items-center gap-2"><Handshake className="w-4 h-4" />Confier un recrutement</a></Button>
-              <Button variant="secondary"><a href="#candidats" className="flex items-center gap-2"><Search className="w-4 h-4" />Envoyer mon CV</a></Button>
+              <Button as="a" href="#contact"><Handshake className="w-4 h-4 mr-2" />Confier un recrutement</Button>
+              <Button as="a" href="#candidats" variant="secondary"><Search className="w-4 h-4 mr-2" />Envoyer mon CV</Button>
             </div>
             <div className="mt-8 grid grid-cols-3 gap-3">
-              <div className="p-6 rounded-2xl border bg-white">
-                <div className="text-3xl md:text-4xl font-semibold">≤ 72 h</div>
-                <div className="mt-2 text-sm text-gray-500">Envoi des 1ers CV</div>
-              </div>
-              <div className="p-6 rounded-2xl border bg-white">
-                <div className="text-3xl md:text-4xl font-semibold">80k+</div>
-                <div className="mt-2 text-sm text-gray-500">Profils qualifiés en base</div>
-              </div>
-              <div className="p-6 rounded-2xl border bg-white">
-                <div className="text-3xl md:text-4xl font-semibold">4.8/5</div>
-                <div className="mt-2 text-sm text-gray-500">Satisfaction clients</div>
-              </div>
+              <div className="p-6 rounded-2xl border bg-white"><div className="text-3xl md:text-4xl font-semibold">≤ 72 h</div><div className="mt-2 text-sm text-gray-500">Envoi des 1ers CV</div></div>
+              <div className="p-6 rounded-2xl border bg-white"><div className="text-3xl md:text-4xl font-semibold">80k+</div><div className="mt-2 text-sm text-gray-500">Profils qualifiés en base</div></div>
+              <div className="p-6 rounded-2xl border bg-white"><div className="text-3xl md:text-4xl font-semibold">4.8/5</div><div className="mt-2 text-sm text-gray-500">Satisfaction clients</div></div>
             </div>
           </div>
           <div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
               <div className="relative rounded-2xl border overflow-hidden shadow-sm">
-                <img
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
-                  alt="Réunion professionnelle dans un cabinet de recrutement"
-                  className="w-full h-full object-cover aspect-[5/3] grayscale"
-                  loading="eager"
-                  fetchpriority="high"
-                />
+                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80" alt="Réunion professionnelle" className="w-full h-full object-cover aspect-[5/3] grayscale" loading="eager" fetchpriority="high" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/80 via-white/30 to-transparent pointer-events-none" />
               </div>
             </motion.div>
@@ -112,71 +116,46 @@ export default function App() {
         </Container>
       </Section>
 
-      {/* Services */}
-      <Section id="expertises" className="bg-gray-50">
+      <Section id="candidats" className="bg-gray-50">
         <Container>
-          <SectionTitle kicker="Nos services" title="Une solution pour chaque besoin" subtitle="CDI, CDD, intérim & missions — accompagnement sur mesure pour entreprises et candidats." />
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Vous êtes une entreprise ?</CardTitle>
-                <CardDescription>Recrutements paie, comptabilité et juridique — middle & top management, profils rares ou en volume.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm text-gray-600">
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Brief structuré & scorecards</div>
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Sourcing direct & prise de références</div>
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Shortlist qualifiée ≤ 72h</div>
-                <div className="pt-2"><Button>Confier un besoin</Button></div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Vous êtes candidat ?</CardTitle>
-                <CardDescription>Accompagnement transparent et rapide sur des opportunités alignées avec vos objectifs.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm text-gray-600">
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Coaching entretien & feedback 72h</div>
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Confidentialité & conseils de rémunération</div>
-                <div className="flex gap-2 items-start"><CheckCircle2 className="w-4 h-4 mt-0.5" />Process clair étape par étape</div>
-                <div className="pt-2"><Button variant="secondary">Déposer mon CV</Button></div>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <SectionTitle kicker="Candidats" title="Votre prochain challenge, sans friction" subtitle="Coaching, feedback sincère et visibilité claire sur l'avancement." />
+            </div>
+            <div>
+              <Card>
+                <CardHeader><CardTitle>Déposez votre CV</CardTitle><CardDescription>Nous revenons vers vous si une opportunité correspond.</CardDescription></CardHeader>
+                <CardContent>
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault()
+                      const form = e.currentTarget
+                      const fd = new FormData(form)
+                      await sendFormspree(FORMSPREE_CV, fd, setCvState)
+                      if (cvState.ok) form.reset()
+                    }}
+                    className="space-y-3"
+                  >
+                    <Input name="Nom complet" placeholder="Nom & Prénom" required />
+                    <Input name="Email" type="email" placeholder="Email" required />
+                    <Input name="Téléphone" type="tel" placeholder="Téléphone (facultatif)" />
+                    <Input name="Lien CV" type="url" placeholder="Lien de CV (Drive/Dropbox) ou joindre plus tard" />
+                    <Textarea name="Message" placeholder="Secteurs, localisations, prétentions…" />
+                    {/* Honey pot anti-spam */}
+                    <input type="text" name="_gotcha" className="hidden" tabIndex="-1" autoComplete="off" />
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">Envoi sécurisé via Formspree.</div>
+                      <Button type="submit" disabled={cvState.loading}>{cvState.loading ? 'Envoi…' : 'Envoyer'}</Button>
+                    </div>
+                    <FormStatus state={cvState} />
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </Container>
       </Section>
 
-      {/* Metiers */}
-      <Section id="metiers">
-        <Container>
-          <SectionTitle kicker="Nos métiers" title="Nos domaines d'expertise" subtitle="Sélection rigoureuse de talents spécialisés en paie, comptabilité et juridique." />
-          <Tabs defaultValue="paie">
-            <div className="grid grid-cols-3 w-full rounded-2xl border p-1 mb-6">
-              <button className="px-3 py-2 rounded-xl text-sm bg-black text-white">Paie</button>
-              <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Comptabilité</button>
-              <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Juridique</button>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {['Gestionnaire paie','Référent paie','Responsable paie','ADP','Payroll Manager','Chef de projet SIRH Paie'].map((r,i)=>(
-                <Badge key={i} className="justify-center py-2">{r}</Badge>
-              ))}
-            </div>
-          </Tabs>
-        </Container>
-      </Section>
-
-      {/* Pourquoi nous */}
-      <Section className="bg-gray-50">
-        <Container>
-          <SectionTitle kicker="Pourquoi nous" title="Les bonnes raisons de nous choisir" />
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card><CardHeader><CardTitle>Zéro coût pour les candidats</CardTitle><CardDescription>Les entreprises nous rémunèrent au succès, jamais les candidats.</CardDescription></CardHeader></Card>
-            <Card><CardHeader><CardTitle>Spécialisation métier</CardTitle><CardDescription>100% dédiés à la paie, la comptabilité et le juridique.</CardDescription></CardHeader></Card>
-            <Card><CardHeader><CardTitle>Méthode & KPI</CardTitle><CardDescription>Cadence hebdo, reporting partagé, time-to-hire réduit.</CardDescription></CardHeader></Card>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Offres */}
       <Section id="offres">
         <Container>
           <SectionTitle kicker="Offres" title="Postes ouverts" subtitle="Quelques opportunités représentatives (exemples)." />
@@ -193,7 +172,7 @@ export default function App() {
                         <Badge>{job.type}</Badge>
                       </CardDescription>
                     </div>
-                    <Button variant="secondary" className="px-3 py-1.5 text-sm">Postuler</Button>
+                    <Button as="a" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Candidature — ' + job.title)}`} variant="secondary" className="px-3 py-1.5 text-sm">Postuler</Button>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -209,127 +188,45 @@ export default function App() {
         </Container>
       </Section>
 
-      {/* Candidats */}
-      <Section id="candidats" className="bg-gray-50">
-        <Container>
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <SectionTitle kicker="Candidats" title="Votre prochain challenge, sans friction" subtitle="Coaching, feedback sincère et visibilité claire sur l'avancement." />
-              <div className="grid md:grid-cols-2 gap-4">
-                <Card><CardHeader><CardTitle className="text-base">Préparation aux entretiens</CardTitle><CardDescription>Brief précis, cas types, conseils de posture.</CardDescription></CardHeader></Card>
-                <Card><CardHeader><CardTitle className="text-base">Transparence</CardTitle><CardDescription>Feedback sous 72h après chaque étape.</CardDescription></CardHeader></Card>
-              </div>
-            </div>
-            <div>
-              <Card>
-                <CardHeader><CardTitle>Déposez votre CV</CardTitle><CardDescription>Nous revenons vers vous si une opportunité correspond.</CardDescription></CardHeader>
-                <CardContent className="space-y-3">
-                  <Input placeholder="Nom & Prénom" />
-                  <Input type="email" placeholder="Email" />
-                  <Input type="tel" placeholder="Téléphone" />
-                  <Input type="file" />
-                  <Textarea placeholder="Secteurs, localisations, prétentions…" />
-                  <Button className="w-full">Envoyer</Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Clients */}
-      <Section id="clients">
-        <Container>
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <SectionTitle kicker="Entreprises" title="Un partenaire de recrutement orienté résultat" subtitle="De la définition du besoin à l'onboarding, avec des garanties adaptées." />
-              <ul className="space-y-3 text-gray-600">
-                {['Brief structuré et scorecards par compétences','Mapping de marché & ciblage précis','Entretiens approfondis & études de cas','Références et accompagnement de l\'offre'].map((item, i) => (
-                  <li key={i} className="flex gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5" />{item}</li>
-                ))}
-              </ul>
-              <div className="mt-6 flex gap-3">
-                <Button>Parler à un consultant</Button>
-                <Button variant="secondary"><a href="#faq">Voir la FAQ</a></Button>
-              </div>
-            </div>
-            <div>
-              <Card>
-                <CardHeader><CardTitle>Nos modèles d'accompagnement</CardTitle><CardDescription>Choisissez le format adapté à votre cadence d'embauche.</CardDescription></CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-3 rounded-2xl border p-1 w-full">
-                    <button className="px-3 py-2 rounded-xl text-sm bg-black text-white">Success fee</button>
-                    <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">Retained</button>
-                    <button className="px-3 py-2 rounded-xl text-sm hover:bg-gray-100">RPO</button>
-                  </div>
-                  <p className="mt-4 text-sm text-gray-600">Paiement au succès, idéal pour besoins ponctuels. Démarrage rapide, engagement flexible.</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Témoignages */}
-      <Section>
-        <Container>
-          <SectionTitle kicker="Témoignages" title="Ce que disent nos clients & candidats" />
-          <div className="grid md:grid-cols-3 gap-6">
-            {[1,2,3].map((i) => (
-              <Card key={i}>
-                <CardContent className="pt-6">
-                  <Quote className="w-8 h-8" />
-                  <p className="mt-4 text-gray-600">« Une compréhension fine des métiers paie/compta/juridique et une exécution rapide. Shortlist reçue en 48h. »</p>
-                  <div className="mt-4 text-sm">
-                    <p className="font-medium">DRH, ETI multi-sites</p>
-                    <p className="text-gray-500">Île-de-France</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* FAQ */}
-      <Section id="faq" className="bg-gray-50">
-        <Container>
-          <SectionTitle kicker="FAQ" title="Une question ? On vous répond" />
-          <div className="mx-auto max-w-3xl space-y-4">
-            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Êtes-vous payants pour les candidats ?</summary><div className="mt-2 text-sm text-gray-600">Jamais. Nos services sont 100% gratuits pour les candidats. Les entreprises nous rémunèrent uniquement en cas de succès.</div></details>
-            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Quels profils recrutez-vous ?</summary><div className="mt-2 text-sm text-gray-600">Paie (gestionnaires, responsables, SIRH), Comptabilité (opérationnels à direction), Juridique (sociétés, social, paralegal, conformité), en CDI, CDD, intérim et missions.</div></details>
-            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">En combien de temps envoyez-vous une shortlist ?</summary><div className="mt-2 text-sm text-gray-600">En général sous 48–72h après le brief qualifié, grâce à notre base de talents et notre approche directe.</div></details>
-            <details className="rounded-2xl border p-4"><summary className="cursor-pointer text-sm font-medium">Intervenez-vous partout en France ?</summary><div className="mt-2 text-sm text-gray-600">Oui, nous opérons partout en France, en présentiel, hybride ou full-remote selon les postes.</div></details>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Contact & Footer */}
       <Section id="contact">
         <Container className="grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <SectionTitle kicker="Contact" title="Discutons de vos besoins" subtitle="Dites-nous en plus sur vos recrutements ou votre projet professionnel." />
+            <SectionTitle kicker="Contact" title="Discutons de vos besoins" subtitle="Vous pouvez aussi nous écrire directement par email." />
             <div className="space-y-3 text-gray-700">
-              <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> +33 1 84 00 00 00</div>
-              <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> contact@edgarwinston.com</div>
+              <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> <a className="underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
             </div>
           </div>
           <Card>
-            <CardHeader><CardTitle>Nous écrire</CardTitle><CardDescription>Réponse sous 24h ouvrées.</CardDescription></CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid md:grid-cols-2 gap-3">
-                <Input placeholder="Nom" />
-                <Input placeholder="Entreprise (facultatif)" />
-              </div>
-              <div className="grid md:grid-cols-2 gap-3">
-                <Input type="email" placeholder="Email" />
-                <Input type="tel" placeholder="Téléphone" />
-              </div>
-              <Textarea placeholder="Votre message" rows={6} />
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-gray-500">En envoyant, vous acceptez notre politique de confidentialité.</div>
-                <Button>Envoyer <ArrowRight className="ml-2 w-4 h-4" /></Button>
-              </div>
+            <CardHeader><CardTitle>Nous confier un besoin</CardTitle><CardDescription>Réponse sous 24h ouvrées.</CardDescription></CardHeader>
+            <CardContent>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault()
+                  const form = e.currentTarget
+                  const fd = new FormData(form)
+                  await sendFormspree(FORMSPREE_NEED, fd, setNeedState)
+                  if (needState.ok) form.reset()
+                }}
+                className="space-y-3"
+              >
+                <div className="grid md:grid-cols-2 gap-3">
+                  <Input name="Entreprise" placeholder="Entreprise" required />
+                  <Input name="Nom" placeholder="Votre nom" required />
+                </div>
+                <div className="grid md:grid-cols-2 gap-3">
+                  <Input name="Email" type="email" placeholder="Votre email" required />
+                  <Input name="Téléphone" type="tel" placeholder="Téléphone (facultatif)" />
+                </div>
+                <Input name="Poste à pourvoir" placeholder="Intitulé du poste" required />
+                <Textarea name="Détails" placeholder="Contexte, missions, localisation, salaire..." />
+                {/* Honey pot anti-spam */}
+                <input type="text" name="_gotcha" className="hidden" tabIndex="-1" autoComplete="off" />
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-gray-500">Envoi sécurisé via Formspree.</div>
+                  <Button type="submit" disabled={needState.loading}>{needState.loading ? 'Envoi…' : 'Envoyer'} <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                </div>
+                <FormStatus state={needState} />
+              </form>
             </CardContent>
           </Card>
         </Container>
@@ -367,12 +264,8 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <p className="font-medium mb-2">Newsletter</p>
-            <div className="flex gap-2">
-              <Input placeholder="Votre email" />
-              <Button>S'abonner</Button>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">Insights recrutement 1×/mois – pas de spam.</p>
+            <p className="font-medium mb-2">Contact</p>
+            <a className="underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </div>
         </Container>
         <div className="py-6 text-center text-xs text-gray-500 border-t">
