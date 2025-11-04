@@ -24,9 +24,8 @@ const jobs = [
 ]
 
 const CONTACT_EMAIL = 'contact@edgaretwinston.fr'
-// ✳️ Remplace ces 2 URL par tes vrais endpoints Formspree (format: https://formspree.io/f/xxxxabcd)
-const FORMSPREE_NEED = 'https://formspree.io/f/XXXXNEED'
-const FORMSPREE_CV   = 'https://formspree.io/f/XXXXCV__'
+const FORMSPREE_NEED = 'https://formspree.io/f/movpobwj'
+const FORMSPREE_CV   = 'https://formspree.io/f/xeopbdko'
 
 async function sendFormspree(endpoint, payload, setState) {
   try {
@@ -141,7 +140,6 @@ export default function App() {
                     <Input name="Téléphone" type="tel" placeholder="Téléphone (facultatif)" />
                     <Input name="Lien CV" type="url" placeholder="Lien de CV (Drive/Dropbox) ou joindre plus tard" />
                     <Textarea name="Message" placeholder="Secteurs, localisations, prétentions…" />
-                    {/* Honey pot anti-spam */}
                     <input type="text" name="_gotcha" className="hidden" tabIndex="-1" autoComplete="off" />
                     <div className="flex items-center justify-between">
                       <div className="text-xs text-gray-500">Envoi sécurisé via Formspree.</div>
@@ -219,7 +217,6 @@ export default function App() {
                 </div>
                 <Input name="Poste à pourvoir" placeholder="Intitulé du poste" required />
                 <Textarea name="Détails" placeholder="Contexte, missions, localisation, salaire..." />
-                {/* Honey pot anti-spam */}
                 <input type="text" name="_gotcha" className="hidden" tabIndex="-1" autoComplete="off" />
                 <div className="flex items-center justify-between">
                   <div className="text-xs text-gray-500">Envoi sécurisé via Formspree.</div>
